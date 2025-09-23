@@ -37,11 +37,14 @@ X_scaled = scaler.fit_transform(X)
 
 cov_matrix = np.cov(X_scaled.T)
 eigen_values, eigen_vectors = np.linalg.eig(cov_matrix)
+
 sorted_indices = np.argsort(eigen_values)[::-1]
 sorted_eigen_values = eigen_values[sorted_indices]
 sorted_eigen_vectors = eigen_vectors[:, sorted_indices]
+
 projection_matrix_2d = sorted_eigen_vectors[:, :2]
 projection_matrix_3d = sorted_eigen_vectors[:, :3]
+
 X_pca_manual_2d = X_scaled.dot(projection_matrix_2d)
 X_pca_manual_3d = X_scaled.dot(projection_matrix_3d)
 
@@ -57,8 +60,7 @@ cmap = plt.get_cmap('Set1')
 plt.figure(figsize=(10, 8))
 scatter_sklearn_2d = plt.scatter(
     X_pca_sklearn_2d[:, 0], X_pca_sklearn_2d[:, 1],
-    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60
-)
+    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60)
 plt.title('Скользящая проекция на 2 главные компоненты (sklearn PCA)', fontsize=16)
 plt.xlabel('Первая главная компонента', fontsize=12)
 plt.ylabel('Вторая главная компонента', fontsize=12)
@@ -69,8 +71,7 @@ plt.show()
 plt.figure(figsize=(10, 8))
 scatter_manual_2d = plt.scatter(
     X_pca_manual_2d[:, 0], X_pca_manual_2d[:, 1],
-    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60
-)
+    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60)
 plt.title('Ручное проецирование на 2 главные компоненты (manual PCA)', fontsize=16)
 plt.xlabel('Первая главная компонента', fontsize=12)
 plt.ylabel('Вторая главная компонента', fontsize=12)
@@ -79,12 +80,10 @@ plt.grid(True)
 plt.show()
 
 fig = plt.figure(figsize=(14, 10))
-
 ax1 = fig.add_subplot(121, projection='3d')
 scatter_sklearn_3d = ax1.scatter(
     X_pca_sklearn_3d[:, 0], X_pca_sklearn_3d[:, 1], X_pca_sklearn_3d[:, 2],
-    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60
-)
+    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60)
 ax1.set_title('Скользящая проекция на 3 главные компоненты (sklearn PCA)', fontsize=14)
 ax1.set_xlabel('Первая главная компонента', fontsize=10)
 ax1.set_ylabel('Вторая главная компонента', fontsize=10)
@@ -94,25 +93,21 @@ ax1.legend(handles=scatter_sklearn_3d.legend_elements()[0], labels=list(class_na
 ax2 = fig.add_subplot(122, projection='3d')
 scatter_manual_3d = ax2.scatter(
     X_pca_manual_3d[:, 0], X_pca_manual_3d[:, 1], X_pca_manual_3d[:, 2],
-    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60
-)
+    c=y, cmap=cmap, alpha=0.9, edgecolor='k', s=60)
 ax2.set_title('Ручное проецирование на 3 главные компоненты (manual PCA)', fontsize=14)
 ax2.set_xlabel('Первая главная компонента', fontsize=10)
 ax2.set_ylabel('Вторая главная компонента', fontsize=10)
 ax2.set_zlabel('Третья главная компонента', fontsize=10)
 ax2.legend(handles=scatter_manual_3d.legend_elements()[0], labels=list(class_names), title="Категории")
-
 plt.tight_layout()
 plt.show()
 
 print("Визуализации отображены")
 
-
 print("\nАнализ информационных потерь (ручное вычисление)")
 total_variance_manual = np.sum(sorted_eigen_values)
 variance_explained_2d_manual = np.sum(sorted_eigen_values[:2]) / total_variance_manual
 variance_explained_3d_manual = np.sum(sorted_eigen_values[:3]) / total_variance_manual
-
 loss_2d_manual = 1 - variance_explained_2d_manual
 loss_3d_manual = 1 - variance_explained_3d_manual
 
@@ -123,10 +118,9 @@ print(f"Ручное PCA - Сохраненная дисперсия при 3 к
 print(f"Ручное PCA - Потери информации при переходе к 3D: {loss_3d_manual:.2%}")
 
 print("\nАнализ информационных потерь (sklearn PCA)")
-total_variance_sklearn = np.sum(pca_sklearn_3d.explained_variance_)
 
-variance_explained_2d_sklearn = np.sum(pca_sklearn_2d.explained_variance_) / total_variance_sklearn
-variance_explained_3d_sklearn = np.sum(pca_sklearn_3d.explained_variance_) / total_variance_sklearn
+variance_explained_2d_sklearn = np.sum(pca_sklearn_2d.explained_variance_ratio_)
+variance_explained_3d_sklearn = np.sum(pca_sklearn_3d.explained_variance_ratio_)
 
 loss_2d_sklearn = 1 - variance_explained_2d_sklearn
 loss_3d_sklearn = 1 - variance_explained_3d_sklearn
