@@ -59,6 +59,10 @@ X_pca_sklearn_2d = pca_sklearn_2d.fit_transform(X_scaled)
 pca_sklearn_3d = PCA(n_components=3)
 X_pca_sklearn_3d = pca_sklearn_3d.fit_transform(X_scaled)
 
+# PCA без ограничения числа компонент (для расчёта полной дисперсии)
+pca_full = PCA()
+pca_full.fit(X_scaled)
+
 # --- Визуализация ---
 cmap = plt.get_cmap('Set1')
 
@@ -124,9 +128,9 @@ print(f"Manual PCA - сохраненная дисперсия 3D: {variance_exp
 print(f"Manual PCA - потери при 3D: {1 - variance_explained_3d_manual:.2%}")
 
 print("\nАнализ информационных потерь (sklearn PCA)")
-total_variance_sklearn = np.sum(pca_sklearn_3d.explained_variance_)
-variance_explained_2d_sklearn = np.sum(pca_sklearn_2d.explained_variance_) / total_variance_sklearn
-variance_explained_3d_sklearn = np.sum(pca_sklearn_3d.explained_variance_) / total_variance_sklearn
+total_variance_sklearn = np.sum(pca_full.explained_variance_)
+variance_explained_2d_sklearn = np.sum(pca_full.explained_variance_[:2]) / total_variance_sklearn
+variance_explained_3d_sklearn = np.sum(pca_full.explained_variance_[:3]) / total_variance_sklearn
 print(f"sklearn PCA - сохраненная дисперсия 2D: {variance_explained_2d_sklearn:.2%}")
 print(f"sklearn PCA - потери при 2D: {1 - variance_explained_2d_sklearn:.2%}")
 print(f"sklearn PCA - сохраненная дисперсия 3D: {variance_explained_3d_sklearn:.2%}")
