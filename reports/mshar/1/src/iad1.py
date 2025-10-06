@@ -103,13 +103,17 @@ def plot_pca(X_pca, y, title, is_3d=False):
     plt.title(title)
     plt.legend()
     plt.grid(True)
-    plt.show()
+    # plt.show() # Мы будем вызывать show() в конце, чтобы показать все графики сразу
 
-# Визуализация для 2 компонент
-plot_pca(X_pca_manual_2d, y, 'Проекция данных на 2 главные компоненты')
+# Визуализация для ручной реализации
+print("\nОтображение графиков для ручной реализации PCA...")
+plot_pca(X_pca_manual_2d, y, 'Проекция на 2 главные компоненты (Ручная реализация)')
+plot_pca(X_pca_manual_3d, y, 'Проекция на 3 главные компоненты (Ручная реализация)', is_3d=True)
 
-# Визуализация для 3 компонент
-plot_pca(X_pca_manual_3d, y, 'Проекция данных на 3 главные компоненты', is_3d=True)
+# Визуализация для реализации Scikit-learn
+print("Отображение графиков для реализации PCA с помощью Scikit-learn...")
+plot_pca(X_pca_sklearn_2d, y, 'Проекция на 2 главные компоненты (Scikit-learn)')
+plot_pca(X_pca_sklearn_3d, y, 'Проекция на 3 главные компоненты (Scikit-learn)', is_3d=True)
 
 # --- 5. Расчет потерь и выводы ---
 
@@ -128,3 +132,6 @@ explained_variance_3d = np.sum(sorted_eigen_values[:3]) / total_variance
 loss_3d = 1 - explained_variance_3d
 print(f"Доля объясненной дисперсии (3 компоненты): {explained_variance_3d:.4f}")
 print(f"Информационные потери (3 компоненты): {loss_3d:.4f}")
+
+# Показываем все созданные графики
+plt.show()
