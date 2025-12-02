@@ -7,7 +7,6 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.metrics import classification_report, accuracy_score
 
 # Импорт библиотек бустинга
-# Примечание: Убедитесь, что они установлены (pip install xgboost catboost)
 from xgboost import XGBClassifier
 from catboost import CatBoostClassifier
 
